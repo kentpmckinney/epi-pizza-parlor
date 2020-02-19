@@ -10,9 +10,10 @@ function Catalog() {
     this.types.push(type);
     return type;
   }
-  this.find = function(id) {
+  this.find = function(name) {
     this.types.forEach(function(type){
-      if (type.id === id) return type;
+      console.log(`type.name: ${type.name}, name: ${name}`)
+      if (type.name === name) return type;
     });
   }
   this.list = function(){
@@ -24,6 +25,7 @@ function Catalog() {
 function Type(id, name, description, baseCost, addOns) {
   this.id = id;
   this.name = name;
+  this.isTaxable;
   this.description = description;
   this.baseCost = baseCost;
   this.addOns = addOns;
@@ -53,8 +55,8 @@ function Order(number) {
   this.isDineIn = false;
   this.totalDue = 0;
   this.paymentCollected = 0;
-  this.add = function(typeId){
-    const item = new Item(typeId);
+  this.add = function(name){
+    const item = new Item(name);
     this.items.push(item);
     return item;
   }
@@ -64,10 +66,12 @@ function Order(number) {
 }
 
 // Defines an item
-function Item() {
-  this.typeId = 0;
-  this.taxable = true;
-  this.baseCost = 0;
+function Item(name) {
+  const item = catalog.find(name);
+  console.log(item);
+  this.typeId = item.typeId;
+  this.taxable = item.isTaxable;
+  this.baseCost = item.baseCost;
   this.addonCost = 0;
   this.total = 0;
   this.prepNotes = "";
@@ -76,7 +80,7 @@ function Item() {
 /*
   Calculates the cost of an item
 */
-Item.prototype.calculateCost = function() {
+Item.prototype.calculateTotal = function() {
   // Look up the item type
   // 
   
@@ -96,7 +100,7 @@ const orders = new Orders();
 
 // Debug testing of orders
 const order = orders.new();
-order.add()
+const item = order.add(catalog.find("Pepperphony Pizza"));
 order.list();
 
 /* ****************************************************************************************
