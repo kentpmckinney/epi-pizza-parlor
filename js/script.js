@@ -5,7 +5,7 @@
 // Collection of item types
 function Catalog() {
   this.types = [];
-  this.new(id, name, description) = function(){
+  this.new = function(id, name, description, baseCost, addOns){
     const type = new Type(id, name, description, baseCost, addOns);
     this.types.push(type);
     return type;
@@ -14,6 +14,9 @@ function Catalog() {
     this.types.forEach(function(type){
       if (type.id === id) return type;
     });
+  }
+  this.list = function(){
+    console.table(this.types);
   }
 }
 
@@ -30,11 +33,14 @@ function Type(id, name, description, baseCost, addOns) {
 function Orders() {
   this.orders = []
   this.index = 1000;
-  this.new() = function(){
+  this.new = function(){
     const order = new Order(this.index++);
     this.orders.push(order);
     return order;
   };
+  this.list = function() {
+    console.table(this.orders);
+  }
 }
 
 // Defines an order, collection of items
@@ -44,16 +50,16 @@ function Order(number) {
   this.tax = 0;
   this.tip = 0;
   this.deliveryFee = 0;
-  this.type = "";
+  this.isDineIn = false;
   this.totalDue = 0;
   this.paymentCollected = 0;
-  this.add(typeId) = function(){
+  this.add = function(typeId){
     const item = new Item(typeId);
     this.items.push(item);
     return item;
   }
   this.list = function() {
-    this.items.forEach
+    console.table(this);
   }
 }
 
@@ -70,7 +76,7 @@ function Item() {
 /*
   Calculates the cost of an item
 */
-Item.propotype.calculateCost = function() {
+Item.prototype.calculateCost = function() {
   // Look up the item type
   // 
   
@@ -82,10 +88,16 @@ catalog.new(101, "Pepperphony Pizza", "Decadent melted faux cheese with crispy m
   {
    "extra cheese" : 2.00
   });
-catalog.new(202, "Sparkling Water", "Ice-cold pure refreshment, naturally calorie-free", 1.95)
+catalog.new(202, "Sparkling Water", "Ice-cold pure refreshment, naturally calorie-free", 1.95);
+catalog.list();
 
 // Create the orders object
 const orders = new Orders();
+
+// Debug testing of orders
+const order = orders.new();
+order.add()
+order.list();
 
 /* ****************************************************************************************
   USER INTERFACE
@@ -110,5 +122,8 @@ $(document).ready(function(){
     // Prevent screen refresh on form submission
     e.preventDefault();
   });
+
+  // Populate the user interface
+
 
 });
