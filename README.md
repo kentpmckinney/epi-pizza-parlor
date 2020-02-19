@@ -15,7 +15,8 @@ https://github.com/kentpmckinney/epicodus-pizza-parlor
 
 ### Changelog:
 * 2/17/2020 - Created skeleton project and pseudocode, updated the readme.md file, and planned app design (1.5 hours)
-* 2/18/2020 - Built out the object structure (WIP) (1.5 hours)
+* 2/18/2020 - Built out the object structure (WIP) (2.5 hours)
+* 2/18/2020 - Tested and debugged object structure (WIP) (1 hour)
 
 
 ### Specifications:

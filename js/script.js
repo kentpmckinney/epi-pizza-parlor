@@ -11,10 +11,11 @@ function Catalog() {
     return type;
   }
   this.find = function(name) {
+    let matchingType = {};
     this.types.forEach(function(type){
-      console.log(`type.name: ${type.name}, name: ${name}`)
-      if (type.name === name) return type;
+      if (type.name == name) matchingType = type;
     });
+    return matchingType;
   }
   this.list = function(){
     console.table(this.types);
@@ -28,7 +29,7 @@ function Type(id, name, description, baseCost, addOns) {
   this.isTaxable;
   this.description = description;
   this.baseCost = baseCost;
-  this.addOns = addOns;
+  this.availableAddOns = addOns;
 }
 
 // Collection of orders
@@ -55,8 +56,8 @@ function Order(number) {
   this.isDineIn = false;
   this.totalDue = 0;
   this.paymentCollected = 0;
-  this.add = function(name){
-    const item = new Item(name);
+  this.add = function(type){
+    const item = new Item(type);
     this.items.push(item);
     return item;
   }
@@ -66,24 +67,27 @@ function Order(number) {
 }
 
 // Defines an item
-function Item(name) {
-  const item = catalog.find(name);
-  console.log(item);
-  this.typeId = item.typeId;
-  this.taxable = item.isTaxable;
-  this.baseCost = item.baseCost;
-  this.addonCost = 0;
+function Item(type) {
+  this.name = type.name;
+  this.typeId = type.id;
+  this.taxable = type.isTaxable;
+  this.baseCost = type.baseCost;
+  this.selectedAddOns = {};
   this.total = 0;
   this.prepNotes = "";
+  this.add = function(addOn) {
+
+  }
+  this.remove = function(addOn) {
+
+  }
 }
 
 /*
   Calculates the cost of an item
 */
 Item.prototype.calculateTotal = function() {
-  // Look up the item type
-  // 
-  
+  this.total = this.baseCost + Object.values(this.selectedAddOns).reduce(function(a, b){ a + b });
 }
 
 // Create the different products for sale
@@ -100,7 +104,12 @@ const orders = new Orders();
 
 // Debug testing of orders
 const order = orders.new();
-const item = order.add(catalog.find("Pepperphony Pizza"));
+const type = catalog.find("Pepperphony Pizza");
+const availableAddOns = type.availableAddOns;
+console.log(availableAddOns);
+const item = order.add(type);
+item.selectedAddOns = availableAddOns;
+item.calculateTotal();
 order.list();
 
 /* ****************************************************************************************
