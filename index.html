@@ -15,15 +15,16 @@
     <main>
       <div class="grid-container">
         <div id="menu">
-          <fieldset>
-            <legend>Menu</legend>
-          </fieldset>
+            <div id="catalog-items"></div>
         </div>
-        <div id="order-items">
-
-        </div>
-        <div id="order-summary">
-
+        <div id="order-items"></div>
+        <div id="total-summary">
+          <div id="item-summary"></div>
+          <div>Subtotal: $<span id="sub-total"></span></div>
+          <div>Tax: $<span id="tax"></span></div>
+          <div>Tip: $<span id="tip"></span></div>
+          <div>Grand Total: $<span id="grand-total"></span></div>
+          <button type="submit">Submit Order</button>
         </div>
       </div>
     </main>

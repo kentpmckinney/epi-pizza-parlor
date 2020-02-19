@@ -15,6 +15,7 @@ function Catalog() {
     this.types.forEach(function(type){ if (type.name == name) matchingType = type; });
     return matchingType;
   }
+  this.getTypes = function() { return this.types; }
   this.list = function(){ console.table(this.types); }
 }
 
@@ -95,7 +96,10 @@ function Item(type) {
     this.updateTotal();
   }
   this.getAvailableAddOns = function(){ return Object.keys(this.availableAddOns); }
-  this.setQuantity = function(qty) { if (!isNaN(qty) && qty >= 0 && qty <= 100) this.quantity = qty; }
+  this.setQuantity = function(qty) {
+    if (!isNaN(qty) && qty >= 0 && qty <= 100) this.quantity = qty;
+    this.updateTotal();
+  }
 }
 
 /*
@@ -120,13 +124,13 @@ const orders = new Orders();
 
 // Debug testing of orders
 const order = orders.new();
-const type = catalog.find("Pepperphony Pizza");
-const item = order.add(type);
-const availableAddOns = item.getAvailableAddOns();
-availableAddOns.forEach(function(key){ item.add(key); });
-item.remove("artichokes");
-item.add("artichokes");
-item.setQuantity(2);
+// const type = catalog.find("Pepperphony Pizza");
+// const item = order.add(type);
+// const availableAddOns = item.getAvailableAddOns();
+// availableAddOns.forEach(function(key){ item.add(key); });
+// item.remove("artichokes");
+// item.add("artichokes");
+// item.setQuantity(2);
 order.list();
 
 
@@ -154,6 +158,31 @@ $(document).ready(function(){
   });
 
   // Populate the user interface
+  const types = catalog.getTypes();
+  types.forEach(function(type){
+    $("#catalog-items").append(`
+      <div>
+        <span>${type.name} (${type.size})</span>
+        <button class="add-button" id="${type.id}" value="${type.name}">Add</button>
+      </div>
+    `);
+  });
 
+  // Responds to the add button on menu items
+  $(".add-button").click(function(e){
+    const name = this.value;
+    const type = catalog.find(name);
+    const item = order.add(type);
+    const availableAddOns = item.getAvailableAddOns();
+    let addOnHTML = "";
+    availableAddOns.forEach(function(key){ addOnHTML += `<input type="checkbox">${key}</input><br>` });
+    // item.setQuantity(2);
+    $("#order-items").append(`
+    <div>
+      <div>${type.name}</div>
+      <div>${addOnHTML}</div>
+    </div>
+  `);
+  });
 
 });
