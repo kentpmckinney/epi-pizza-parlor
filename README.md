@@ -18,6 +18,7 @@ https://github.com/kentpmckinney/epicodus-pizza-parlor
 * 2/18/2020 - Built out the object structure (WIP) (2.5 hours)
 * 2/18/2020 - Tested and debugged object structure (WIP) (1 hour)
 * 2/19/2020 - Further built out the object structure (WIP) (2 hours)
+* 2/19/2020 - Added basic user interface (1 hour)
 
 
 ### Specifications:
