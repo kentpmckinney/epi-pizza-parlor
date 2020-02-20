@@ -188,6 +188,7 @@ $(document).ready(function(){
         <span>${type.name} (${type.size}) ... ${type.baseCost}</span>
         <button class="add-button" id="${type.id}" value="${type.name}">Add</button>
       </div>
+      <div class="menu-description">${type.description}</div>
     `);
   });
 
@@ -207,7 +208,9 @@ $(document).ready(function(){
     $("#order-items").append(`
       <div>
         <div>${type.name} (${type.size})</div>
-        <div>${addOnHTML}</div>
+        <div>
+          <div class="addon-list">${addOnHTML}</div>
+        </div>
       </div>
     `);
     $(".addon-checkbox").change(function(){

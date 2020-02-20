@@ -4,21 +4,48 @@
   text-align: right;
 }
 
+h1 {
+  font-size: 18pt;
+}
+
+h2 {
+  font-size: 14pt;
+}
+
 #menu {
   display: flex;
   flex-direction: column;
   justify-content: right;
-  /* background-color: #474864; */
+  overflow: auto;
+  padding: 30px;
 }
 
 #order {
-  /* background-color: #378461; */
+  border-left: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+  overflow: auto;
+  padding: 30px;
+  text-align: left;
 }
 
 #summary {
-  /* background-color: #9037EF; */
+  padding: 30px;
+  text-align: left;
 }
 
 .centered {
   text-align: center;
+}
+
+.addon-list {
+  text-align: left;
+  margin-left: 10%;
+  font-size: 8pt;
+}
+
+.menu-description {
+  text-align: left;
+  margin-left: 50%;
+  font-size: 8pt;
+  color: gray;
 }
