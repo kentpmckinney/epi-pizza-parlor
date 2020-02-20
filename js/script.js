@@ -83,7 +83,7 @@ function Order(number) {
   // this.getTotalDue = function(){ return this.totalDue; }
   this.getSubTotal = function(){ 
     console.log(`order.getSubTotal, this.subTotal: ${this.subTotal}`)
-    return this.subTotal;
+    return this.subTotal.toFixed(2);
    }
   this.list = function() { console.table(this); }
   // this.setDineIn = function(bool) { if (typeof bool === boolean) this.isDineIn = bool; }

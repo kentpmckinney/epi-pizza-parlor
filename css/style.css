@@ -1,3 +1,8 @@
+body {
+  background: rgb(36,35,0);
+  background: linear-gradient(90deg, rgba(36,35,0,0.3071429255295869) 0%, rgba(121,108,9,0.5172269591430323) 35%, rgba(255,220,0,0.3435574913559174) 100%);
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
