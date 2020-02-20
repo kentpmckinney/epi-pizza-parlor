@@ -10,16 +10,20 @@
   </head>
   <body class="container">
     <header>
-      <h1>One-For-All Pizzeria & Deli</h1>
+      <h1 class="centered">One-For-All Pizzeria & Deli</h1>
     </header>
     <main>
       <div class="grid-container">
         <div id="menu">
-            <div id="menu-items"></div>
+          <div class="centered"><h2>Menu</h2></div>
+          <div id="menu-items"></div>
         </div>
-        <div id="order-items"></div>
-        <div id="total-summary">
-          <div id="item-summary"></div>
+        <div id="order">
+          <div class="centered"><h2>Your Order</h2></div>
+          <div id="order-items"></div>
+        </div>
+        <div id="summary">
+          <div class="centered"><h2>Summary</h2></div>
           <div>Total: $<span id="sub-total">0.00</span></div>
           <button type="submit">Submit Order</button>
         </div>

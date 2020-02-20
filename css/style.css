@@ -1,19 +1,24 @@
 .grid-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  text-align: right;
 }
 
-#menu-items {
+#menu {
   display: flex;
   flex-direction: column;
   justify-content: right;
-  background-color: #474864;
+  /* background-color: #474864; */
 }
 
-#order-items {
-  background-color: #378461;
+#order {
+  /* background-color: #378461; */
 }
 
-#total-summary {
-  background-color: #9037EF;
+#summary {
+  /* background-color: #9037EF; */
+}
+
+.centered {
+  text-align: center;
 }
