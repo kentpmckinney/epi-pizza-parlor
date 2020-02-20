@@ -128,9 +128,9 @@ function Item(type) {
 */
 Item.prototype.updateTotal = function() {
   this.total = this.baseCost;
-  const values = Object.values(this.selectedAddOns);
-  if (values && values.length > 0)
-    values.reduce(function(a, b){ return a + parseInt(b) });
+  let values = Object.values(this.selectedAddOns);
+  if (Array.isArray(values) && values.length)
+    this.total += values.reduce(function(a, b){ return a + parseInt(b) });
   this.total *= this.quantity;
 }
 
@@ -217,6 +217,7 @@ $(document).ready(function(){
       let item = order.getItemById(this.value);
       const key = $(this).attr("key");
       $(this).prop("checked") ? item.add(key) : item.remove(key);
+      order.updateTotal();
       updateUI();
     });
   });

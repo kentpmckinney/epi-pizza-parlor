@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   text-align: right;
+  font-family: Verdana, Geneva, Tahoma, sans-serif
 }
 
 h1 {
@@ -18,6 +19,7 @@ h2 {
   justify-content: right;
   overflow: auto;
   padding: 30px;
+  height: 100%;
 }
 
 #order {
@@ -26,6 +28,7 @@ h2 {
   overflow: auto;
   padding: 30px;
   text-align: left;
+  height: 100%;
 }
 
 #summary {
@@ -45,7 +48,7 @@ h2 {
 
 .menu-description {
   text-align: left;
-  margin-left: 50%;
+  margin-left: 40%;
   font-size: 8pt;
   color: gray;
 }
