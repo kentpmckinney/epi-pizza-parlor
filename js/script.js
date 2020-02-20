@@ -3,15 +3,15 @@
 */
 
 // Collection of the types of items for sale
-function Catalog() {
+function Menu() {
   this.types = [];
-  this.new = function(iid, name, description, size, baseCost, addOns){
-    const type = new Type(iid, name, description, size, baseCost, addOns);
+  this.new = function(id, name, description, size, baseCost, addOns){
+    const type = new Type(id, name, description, size, baseCost, addOns);
     this.types.push(type);
     return type;
   }
   this.find = function(name) {
-    let matchingType = {};
+    let matchingType;
     this.types.forEach(function(type){ if (type.name == name) matchingType = type; });
     return matchingType;
   }
@@ -53,7 +53,7 @@ function Order(number) {
   // this.tip = 0;
   // this.deliveryFee = 0;
   // this.isDineIn = false;
-  this.totalDue = 0;
+  // this.totalDue = 0;
   this.subTotal = 0;
   // this.paymentCollected = 0;
   this.add = function(type){
@@ -63,24 +63,28 @@ function Order(number) {
     this.updateTotal();
     return item;
   }
+  this.remove = function(itemId) {
+    // TODO
+  }
   this.updateTotal = function() {
-    this.subTotal = 0;
+    let total = 0;
     this.items.forEach(function(item){
-      this.subTotal += item.total;
-    })
-    this.totalDue = this.subTotal;
+      console.log(`item.total: ${item.total}`)
+      total += parseFloat(item.total);
+    });
+    this.subTotal = total;
+    // this.totalDue = this.subTotal;
   }
   this.getItemById = function(id){
     let matchingItem;
     this.items.forEach(function(item){ if (item.itemId == id) { matchingItem = item;} });
     return matchingItem;
   }
-  this.getTotalDue = function(){
-    return this.totalDue;
-  }
-  this.getSubTotal = function(){
+  // this.getTotalDue = function(){ return this.totalDue; }
+  this.getSubTotal = function(){ 
+    console.log(`order.getSubTotal, this.subTotal: ${this.subTotal}`)
     return this.subTotal;
-  }
+   }
   this.list = function() { console.table(this); }
   // this.setDineIn = function(bool) { if (typeof bool === boolean) this.isDineIn = bool; }
   // this.setTip = function(tip) { if (!isNaN(tip) && tip >= 0 && tip <= 100) this.tip = tip; }
@@ -123,24 +127,27 @@ function Item(type) {
   Implemented as a prototype to satisfy project requirements
 */
 Item.prototype.updateTotal = function() {
-  this.total = this.baseCost + Object.values(this.selectedAddOns).reduce(function(a, b){ return a + parseInt(b) });
+  this.total = this.baseCost;
+  const values = Object.values(this.selectedAddOns);
+  if (values && values.length > 0)
+    values.reduce(function(a, b){ return a + parseInt(b) });
   this.total *= this.quantity;
 }
 
-// Populate the catalog with items for sale
-const catalog = new Catalog();
-catalog.new(101, "Pepperphony Pizza", "Decadent melted faux cheese with crispy meatless pepperoni", "small", 10.95,
+// Populate the menu with items for sale
+const menu = new Menu();
+menu.new(101, "Pepperphony Pizza", "Decadent melted faux cheese with crispy meatless pepperoni", "small", 10.95,
   { "extra cheese" : 2.00, "extra pepperphony" : 1.00, "artichokes" : 1.00, "mushrooms" : 1.00 });
-catalog.new(201, "Sparkling Water", "Ice-cold pure refreshment, naturally calorie-free", "16oz", 1.95,
+menu.new(201, "Sparkling Water", "Ice-cold pure refreshment, naturally calorie-free", "16oz", 1.95,
   { "cherry flavor" : 0.00, "strawberry flavor" : 0.00, "key lime flavor" : 0.00, "lemon flavor" : 0.00});
-// catalog.list();
+//  menu.list();
 
 // Create the orders object
 const orders = new Orders();
 
 // Debug testing of orders
 const order = orders.new();
-// const type = catalog.find("Pepperphony Pizza");
+// const type = menu.find("Pepperphony Pizza");
 // const item = order.add(type);
 // const availableAddOns = item.getAvailableAddOns();
 // availableAddOns.forEach(function(key){ item.add(key); });
@@ -174,11 +181,11 @@ $(document).ready(function(){
   });
 
   // Populate the user interface
-  const types = catalog.getTypes();
+  const types = menu.getTypes();
   types.forEach(function(type){
-    $("#catalog-items").append(`
+    $("#menu-items").append(`
       <div>
-        <span>${type.name} (${type.size})</span>
+        <span>${type.name} (${type.size}) ... ${type.baseCost}</span>
         <button class="add-button" id="${type.id}" value="${type.name}">Add</button>
       </div>
     `);
@@ -187,12 +194,16 @@ $(document).ready(function(){
   // Responds to the add button on menu items
   $(".add-button").click(function(e){
     const name = this.value;
-    const type = catalog.find(name);
+    const type = menu.find(name);
     const item = order.add(type);
+    item.updateTotal();
+    order.updateTotal();
+    order.list();
     const availableAddOns = item.getAvailableAddOns();
     let addOnHTML = "";
     availableAddOns.forEach(function(key){ addOnHTML += `<input class="addon-checkbox" type="checkbox" value="${item.itemId}" key="${key}"> ${key}<br>` });
     // item.setQuantity(2);
+    updateUI();
     $("#order-items").append(`
       <div>
         <div>${type.name} (${type.size})</div>
@@ -209,7 +220,6 @@ $(document).ready(function(){
 
   function updateUI() {
     $("#sub-total").text(order.getSubTotal());
-    $("#grand-total").text(order.getTotalDue());
   }
 
 });

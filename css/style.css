@@ -1,4 +1,19 @@
 .grid-container {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+#menu-items {
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  background-color: #474864;
+}
+
+#order-items {
+  background-color: #378461;
+}
+
+#total-summary {
+  background-color: #9037EF;
 }
