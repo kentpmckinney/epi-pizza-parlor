@@ -1,6 +1,6 @@
 body {
   background: rgb(36,35,0);
-  background: linear-gradient(90deg, rgba(36,35,0,0.3071429255295869) 0%, rgba(121,108,9,0.5172269591430323) 35%, rgba(255,220,0,0.3435574913559174) 100%);
+  background: linear-gradient(90deg, rgba(36, 35, 0, 0.082) 0%, rgba(121,108,9,0.5172269591430323) 35%, rgba(255,220,0,0.3435574913559174) 100%);
 }
 
 .grid-container {
@@ -41,6 +41,11 @@ h2 {
   text-align: left;
 }
 
+.notice {
+  font-size: 8pt;
+  text-align: center;
+}
+
 .centered {
   text-align: center;
 }
@@ -55,5 +60,9 @@ h2 {
   text-align: left;
   margin-left: 40%;
   font-size: 8pt;
-  color: gray;
+  color: white;
+}
+
+.menu-description:hover {
+  color: black;
 }

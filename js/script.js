@@ -68,10 +68,7 @@ function Order(number) {
   }
   this.updateTotal = function() {
     let total = 0;
-    this.items.forEach(function(item){
-      console.log(`item.total: ${item.total}`)
-      total += parseFloat(item.total);
-    });
+    this.items.forEach(function(item){ total += parseFloat(item.total); });
     this.subTotal = total;
     // this.totalDue = this.subTotal;
   }
@@ -82,7 +79,6 @@ function Order(number) {
   }
   // this.getTotalDue = function(){ return this.totalDue; }
   this.getSubTotal = function(){ 
-    console.log(`order.getSubTotal, this.subTotal: ${this.subTotal}`)
     return this.subTotal.toFixed(2);
    }
   this.list = function() { console.table(this); }
@@ -144,17 +140,7 @@ menu.new(201, "Sparkling Water", "Ice-cold pure refreshment, naturally calorie-f
 
 // Create the orders object
 const orders = new Orders();
-
-// Debug testing of orders
 const order = orders.new();
-// const type = menu.find("Pepperphony Pizza");
-// const item = order.add(type);
-// const availableAddOns = item.getAvailableAddOns();
-// availableAddOns.forEach(function(key){ item.add(key); });
-// item.remove("artichokes");
-// item.add("artichokes");
-// item.setQuantity(2);
-// order.list();
 
 
 /* ****************************************************************************************
@@ -174,10 +160,8 @@ $(document).ready(function(){
   /*
     Responds to presses of the submit button
   */
-  $("#form").submit(function(e){
-
-    // Prevent screen refresh on form submission
-    e.preventDefault();
+  $("#submit").click(function(e){
+    
   });
 
   // Populate the user interface
