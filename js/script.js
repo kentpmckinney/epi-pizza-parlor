@@ -47,24 +47,39 @@ function Orders() {
 // Defines an order, collection of items
 function Order(number) {
   this.number = number;
+  this.itemCount = 0;
   this.items = [];
   // this.tax = 0;
   // this.tip = 0;
   // this.deliveryFee = 0;
   // this.isDineIn = false;
   this.totalDue = 0;
+  this.subTotal = 0;
   // this.paymentCollected = 0;
   this.add = function(type){
     const item = new Item(type);
+    item.itemId = this.itemCount++;
     this.items.push(item);
     this.updateTotal();
     return item;
   }
   this.updateTotal = function() {
-    this.totalDue = 0;
+    this.subTotal = 0;
     this.items.forEach(function(item){
-      this.totalDue += item.total;
+      this.subTotal += item.total;
     })
+    this.totalDue = this.subTotal;
+  }
+  this.getItemById = function(id){
+    let matchingItem;
+    this.items.forEach(function(item){ if (item.itemId == id) { matchingItem = item;} });
+    return matchingItem;
+  }
+  this.getTotalDue = function(){
+    return this.totalDue;
+  }
+  this.getSubTotal = function(){
+    return this.subTotal;
   }
   this.list = function() { console.table(this); }
   // this.setDineIn = function(bool) { if (typeof bool === boolean) this.isDineIn = bool; }
@@ -74,6 +89,7 @@ function Order(number) {
 
 // Defines an item
 function Item(type) {
+  this.itemId = 0;
   this.name = type.name;
   this.typeId = type.id;
   // this.taxable = type.isTaxable;
@@ -117,7 +133,7 @@ catalog.new(101, "Pepperphony Pizza", "Decadent melted faux cheese with crispy m
   { "extra cheese" : 2.00, "extra pepperphony" : 1.00, "artichokes" : 1.00, "mushrooms" : 1.00 });
 catalog.new(201, "Sparkling Water", "Ice-cold pure refreshment, naturally calorie-free", "16oz", 1.95,
   { "cherry flavor" : 0.00, "strawberry flavor" : 0.00, "key lime flavor" : 0.00, "lemon flavor" : 0.00});
-catalog.list();
+// catalog.list();
 
 // Create the orders object
 const orders = new Orders();
@@ -131,7 +147,7 @@ const order = orders.new();
 // item.remove("artichokes");
 // item.add("artichokes");
 // item.setQuantity(2);
-order.list();
+// order.list();
 
 
 /* ****************************************************************************************
@@ -175,14 +191,25 @@ $(document).ready(function(){
     const item = order.add(type);
     const availableAddOns = item.getAvailableAddOns();
     let addOnHTML = "";
-    availableAddOns.forEach(function(key){ addOnHTML += `<input type="checkbox">${key}</input><br>` });
+    availableAddOns.forEach(function(key){ addOnHTML += `<input class="addon-checkbox" type="checkbox" value="${item.itemId}" key="${key}"> ${key}<br>` });
     // item.setQuantity(2);
     $("#order-items").append(`
-    <div>
-      <div>${type.name}</div>
-      <div>${addOnHTML}</div>
-    </div>
-  `);
+      <div>
+        <div>${type.name} (${type.size})</div>
+        <div>${addOnHTML}</div>
+      </div>
+    `);
+    $(".addon-checkbox").change(function(){
+      let item = order.getItemById(this.value);
+      const key = $(this).attr("key");
+      $(this).prop("checked") ? item.add(key) : item.remove(key);
+      updateUI();
+    });
   });
+
+  function updateUI() {
+    $("#sub-total").text(order.getSubTotal());
+    $("#grand-total").text(order.getTotalDue());
+  }
 
 });
