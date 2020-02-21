@@ -60,9 +60,25 @@ h2 {
   text-align: left;
   margin-left: 40%;
   font-size: 8pt;
-  color: white;
+  color: black;
 }
 
-.menu-description:hover {
+.total {
+  font-size: 12pt;
+}
+
+.remove-item {
+  font-size: 8pt;
   color: black;
+  cursor: pointer;
+}
+
+.remove-item:hover {
+  color: red;
+}
+
+.order-info {
+  text-align: right;
+  font-family: monospace;
+  font-size: 8pt;
 }

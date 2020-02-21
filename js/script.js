@@ -24,7 +24,6 @@ function Type(id, name, description, size, baseCost, addOns) {
   this.id = id;
   this.name = name;
   this.size = size;
-  // this.isTaxable = true;
   this.description = description;
   this.baseCost = baseCost;
   this.availableAddOns = addOns;
@@ -34,28 +33,23 @@ function Type(id, name, description, size, baseCost, addOns) {
 function Orders() {
   this.orders = []
   this.index = 1000;
-  // this.taxPercent = 0;
   this.new = function(){
     const order = new Order(this.index++);
     this.orders.push(order);
     return order;
   };
   this.list = function() { console.table(this.orders); }
-  // this.setTaxPercent = function(tax) { if (!isNaN(tax) && tax >= 0 && tax <= 100) this.taxPercent = tax; }
 }
 
 // Defines an order, collection of items
 function Order(number) {
   this.number = number;
-  this.itemCount = 0;
+  var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+  var today  = new Date();
+  this.created = today.toLocaleDateString("en-US", options);
+  this.itemCount = 100000;
   this.items = [];
-  // this.tax = 0;
-  // this.tip = 0;
-  // this.deliveryFee = 0;
-  // this.isDineIn = false;
-  // this.totalDue = 0;
   this.subTotal = 0;
-  // this.paymentCollected = 0;
   this.add = function(type){
     const item = new Item(type);
     item.itemId = this.itemCount++;
@@ -63,43 +57,42 @@ function Order(number) {
     this.updateTotal();
     return item;
   }
-  this.remove = function(itemId) {
-    // TODO
+  this.remove = function(id) {
+    this.items = this.items.filter(function(item){
+      if (item.itemId == id) return false;
+      return true;
+    });
+    this.updateTotal();
   }
   this.updateTotal = function() {
     let total = 0;
     this.items.forEach(function(item){ total += parseFloat(item.total); });
     this.subTotal = total;
-    // this.totalDue = this.subTotal;
   }
   this.getItemById = function(id){
     let matchingItem;
     this.items.forEach(function(item){ if (item.itemId == id) { matchingItem = item;} });
     return matchingItem;
   }
-  // this.getTotalDue = function(){ return this.totalDue; }
   this.getSubTotal = function(){ 
     return this.subTotal.toFixed(2);
    }
   this.list = function() { console.table(this); }
-  // this.setDineIn = function(bool) { if (typeof bool === boolean) this.isDineIn = bool; }
-  // this.setTip = function(tip) { if (!isNaN(tip) && tip >= 0 && tip <= 100) this.tip = tip; }
-  // this.setDeliveryFee = function(fee) { if (!isNaN(fee) && fee >= 0 && fee <= 10) this.fee = fee; }
+  this.getOrderNumber = function() { return this.number; }
+  this.getTimeCreated = function() { return this.created; }
 }
 
 // Defines an item
 function Item(type) {
-  this.itemId = 0;
+  this.itemId;
   this.name = type.name;
   this.typeId = type.id;
-  // this.taxable = type.isTaxable;
   this.size = type.size;
   this.baseCost = type.baseCost;
   this.quantity = 1;
   this.availableAddOns = type.availableAddOns;
   this.selectedAddOns = {};
   this.total = 0;
-  // this.prepNotes = "";
   this.add = function(key) {
     const availableKeys = Object.keys(this.availableAddOns);
     if (availableKeys.includes(key)) {
@@ -126,42 +119,44 @@ Item.prototype.updateTotal = function() {
   this.total = this.baseCost;
   let values = Object.values(this.selectedAddOns);
   if (Array.isArray(values) && values.length)
-    this.total += values.reduce(function(a, b){ return a + parseInt(b) });
+    this.total += parseFloat(values.reduce(function(a, b){ return parseFloat(a) + parseFloat(b) }));
   this.total *= this.quantity;
 }
 
 // Populate the menu with items for sale
 const menu = new Menu();
 menu.new(101, "Pepperphony Pizza", "Decadent melted faux cheese with crispy meatless pepperoni", "small", 10.95,
-  { "extra cheese" : 2.00, "extra pepperphony" : 1.00, "artichokes" : 1.00, "mushrooms" : 1.00 });
+  { "extra cheese" : "2.00", "extra pepperphony" : "1.00", "artichokes" : "1.00", "mushrooms" : "1.00" });
 menu.new(201, "Sparkling Water", "Ice-cold pure refreshment, naturally calorie-free", "16oz", 1.95,
-  { "cherry flavor" : 0.00, "strawberry flavor" : 0.00, "key lime flavor" : 0.00, "lemon flavor" : 0.00});
-//  menu.list();
+  { "cherry flavor" : "0.00", "strawberry flavor" : "0.00", "key lime flavor" : "0.00", "lemon flavor" : "0.00"});
 
 // Create the orders object
 const orders = new Orders();
-const order = orders.new();
+let order = orders.new();
 
 
 /* ****************************************************************************************
   USER INTERFACE
 */
 
+function updateUI() {
+  $("#sub-total").text(order.getSubTotal());
+  $("#order-number").text(order.getOrderNumber());
+  $("#created-time").text(order.getTimeCreated());
+}
+
 /*
   $(document).ready() executes after the page loads
 */
 $(document).ready(function(){
 
-  // respond to size and topping selections by continually updating the final cost in the user interface
-  // create a pizza object with toppings and size properties
-  // create a prototype method for the cost of the pizza, keeping it simple to start
-  // create user interface to choose toppings and size
-
   /*
     Responds to presses of the submit button
   */
   $("#submit").click(function(e){
-    
+    order = orders.new();
+    $("#order-items").empty();
+    updateUI();
   });
 
   // Populate the user interface
@@ -183,20 +178,19 @@ $(document).ready(function(){
     const item = order.add(type);
     item.updateTotal();
     order.updateTotal();
-    order.list();
     const availableAddOns = item.getAvailableAddOns();
     let addOnHTML = "";
-    availableAddOns.forEach(function(key){ addOnHTML += `<input class="addon-checkbox" type="checkbox" value="${item.itemId}" key="${key}"> ${key}<br>` });
-    // item.setQuantity(2);
+    availableAddOns.forEach(function(addon){ addOnHTML += `<input class="addon-checkbox" type="checkbox" value="${item.itemId}" key="${addon}"> ${addon} (+${item.availableAddOns[addon]})<br>` });
     updateUI();
     $("#order-items").append(`
-      <div>
-        <div>${type.name} (${type.size})</div>
+      <div id="${item.itemId}">
+        <div>${type.name} (${type.size}) [${type.baseCost}] <span class="remove-item" item="${item.itemId}">[remove]</span></div>
         <div>
           <div class="addon-list">${addOnHTML}</div>
         </div>
       </div>
     `);
+
     $(".addon-checkbox").change(function(){
       let item = order.getItemById(this.value);
       const key = $(this).attr("key");
@@ -204,10 +198,14 @@ $(document).ready(function(){
       order.updateTotal();
       updateUI();
     });
-  });
 
-  function updateUI() {
-    $("#sub-total").text(order.getSubTotal());
-  }
+    $(".remove-item").click(function(){
+      const itemId = $(this).attr("item");
+      let item = order.getItemById(itemId);
+      order.remove(itemId);
+      $(`#${itemId}`).remove();
+      updateUI();
+    });
+  });
 
 });
