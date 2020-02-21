@@ -1,6 +1,5 @@
 body, html {
   background: rgb(36,35,0);
-  /* background: linear-gradient(90deg, rgba(36, 35, 0, 0.082) 0%, rgba(121,108,9,0.5172269591430323) 35%, rgba(255,220,0,0.3435574913559174) 100%); */
   background: linear-gradient(45deg, yellow 0%, #FFFFCC 50%, yellow 100%);
   background-repeat: no-repeat;
   background-blend-mode: lighten;
@@ -17,7 +16,7 @@ body, html {
 
 h1 {
   font-size: 24pt;
-  line-height: 0.4em;
+  line-height: 0.2em;
 }
 
 h2 {

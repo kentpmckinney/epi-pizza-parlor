@@ -2,7 +2,7 @@
   BUSINESS LOGIC
 */
 
-// Collection of the types of items for sale
+/* Menu() -a collection of the types of items for sale */
 function Menu() {
   this.types = [];
   this.new = function(id, name, description, size, baseCost, addOns){
@@ -16,10 +16,9 @@ function Menu() {
     return matchingType;
   }
   this.getTypes = function() { return this.types; }
-  this.list = function(){ console.table(this.types); }
 }
 
-// Defines an item type
+/* Type() - a template for the items which are for sale */
 function Type(id, name, description, size, baseCost, addOns) {
   this.id = id;
   this.name = name;
@@ -29,7 +28,7 @@ function Type(id, name, description, size, baseCost, addOns) {
   this.availableAddOns = addOns;
 }
 
-// Collection of orders
+/* Orders() - a container object to manage orders */
 function Orders() {
   this.orders = []
   this.index = 1000;
@@ -41,18 +40,17 @@ function Orders() {
   this.list = function() { console.table(this.orders); }
 }
 
-// Defines an order, collection of items
+/* Order() - manages items being ordered */
 function Order(number) {
   this.number = number;
-  var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
-  var today  = new Date();
-  this.created = today.toLocaleDateString("en-US", options);
-  this.itemCount = 100000;
+  this.created = (new Date()).toLocaleDateString("en-US", 
+    { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' });
+  this.itemIndex = 100000;
   this.items = [];
   this.subTotal = 0;
   this.add = function(type){
     const item = new Item(type);
-    item.itemId = this.itemCount++;
+    item.itemId = this.itemIndex++;
     this.items.push(item);
     this.updateTotal();
     return item;
@@ -77,12 +75,11 @@ function Order(number) {
   this.getSubTotal = function(){ 
     return this.subTotal.toFixed(2);
    }
-  this.list = function() { console.table(this); }
   this.getOrderNumber = function() { return this.number; }
   this.getTimeCreated = function() { return this.created; }
 }
 
-// Defines an item
+/* Item() - an item for sale */
 function Item(type) {
   this.itemId;
   this.name = type.name;
@@ -105,16 +102,9 @@ function Item(type) {
     this.updateTotal();
   }
   this.getAvailableAddOns = function(){ return Object.keys(this.availableAddOns); }
-  this.setQuantity = function(qty) {
-    if (!isNaN(qty) && qty >= 0 && qty <= 100) this.quantity = qty;
-    this.updateTotal();
-  }
 }
 
-/*
-  Calculates the cost of an item
-  Implemented as a prototype to satisfy project requirements
-*/
+/* Item.prototype.updateTotal() - calculates the cost of an item */
 Item.prototype.updateTotal = function() {
   this.total = this.baseCost;
   let values = Object.values(this.selectedAddOns);
@@ -123,15 +113,17 @@ Item.prototype.updateTotal = function() {
   this.total *= this.quantity;
 }
 
-// Populate the menu with items for sale
+/* Populate the menu with items for sale */
 const menu = new Menu();
 menu.new(101, "Pepperphony Pizza", "Decadent melted faux cheese with crispy meatless pepperoni", "small", 10.95,
   { "extra cheese" : "2.00", "extra pepperphony" : "1.00", "artichokes" : "1.00", "mushrooms" : "1.00" });
 menu.new(201, "Sparkling Water", "Ice-cold pure refreshment, naturally calorie-free", "16oz", 1.95,
   { "cherry flavor" : "0.00", "strawberry flavor" : "0.00", "key lime flavor" : "0.00", "lemon flavor" : "0.00"});
 
-// Create the orders object
+/* Instantiate the orders object in global scope */
 const orders = new Orders();
+
+/* Instantiate the first order in global scope */
 let order = orders.new();
 
 
@@ -139,27 +131,24 @@ let order = orders.new();
   USER INTERFACE
 */
 
-function updateUI() {
+/* updateOrderUI() - update order information in the user interface */
+function updateOrderUI() {
   $("#sub-total").text(order.getSubTotal());
   $("#order-number").text(order.getOrderNumber());
   $("#created-time").text(order.getTimeCreated());
 }
 
-/*
-  $(document).ready() executes after the page loads
-*/
+/* $(document).ready() executes after the page loads */
 $(document).ready(function(){
 
-  /*
-    Responds to presses of the submit button
-  */
+  /* Respond to presses of the submit button */
   $("#submit").click(function(e){
     order = orders.new();
     $("#order-items").empty();
-    updateUI();
+    updateOrderUI();
   });
 
-  // Populate the user interface
+  /* Populate the user interface */
   const types = menu.getTypes();
   types.forEach(function(type){
     $("#menu-items").append(`
@@ -171,17 +160,19 @@ $(document).ready(function(){
     `);
   });
 
-  // Responds to the add button on menu items
+  /* Respond to the add button on menu items */
   $(".add-button").click(function(e){
     const name = this.value;
     const type = menu.find(name);
     const item = order.add(type);
     item.updateTotal();
     order.updateTotal();
-    const availableAddOns = item.getAvailableAddOns();
+    updateOrderUI();
+
+    /* Create HTML for an item */
     let addOnHTML = "";
+    const availableAddOns = item.getAvailableAddOns();
     availableAddOns.forEach(function(addon){ addOnHTML += `<input class="addon-checkbox" type="checkbox" value="${item.itemId}" key="${addon}"> ${addon} (+${item.availableAddOns[addon]})<br>` });
-    updateUI();
     $("#order-items").append(`
       <div id="${item.itemId}" class="${item.itemId % 2 ? 'even-row' : 'odd-row'}">
         <div>${type.name} (${type.size}) [${type.baseCost}] <span class="remove-item" item="${item.itemId}">[remove]</span></div>
@@ -191,20 +182,22 @@ $(document).ready(function(){
       </div>
     `);
 
+    /* Set the onchange event handler for the add-on checkboxes */
     $(".addon-checkbox").change(function(){
       let item = order.getItemById(this.value);
       const key = $(this).attr("key");
       $(this).prop("checked") ? item.add(key) : item.remove(key);
       order.updateTotal();
-      updateUI();
+      updateOrderUI();
     });
 
+    /* Set the onclick event handler for the clickable [remove] tag */
     $(".remove-item").click(function(){
       const itemId = $(this).attr("item");
       let item = order.getItemById(itemId);
       order.remove(itemId);
       $(`#${itemId}`).remove();
-      updateUI();
+      updateOrderUI();
     });
   });
 
