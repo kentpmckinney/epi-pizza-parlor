@@ -5,17 +5,17 @@
 /* Menu() -a collection of the types of items for sale */
 function Menu() {
   this.types = [];
-  this.new = function(id, name, description, size, baseCost, addOns){
+  this.new = (id, name, description, size, baseCost, addOns) => {
     const type = new Type(id, name, description, size, baseCost, addOns);
     this.types.push(type);
     return type;
   }
-  this.find = function(id) {
+  this.find = id => {
     let matchingType;
-    this.types.forEach(function(type){ if (type.id == id) matchingType = type; });
+    this.types.forEach(type => { if (type.id == id) matchingType = type; });
     return matchingType;
   }
-  this.getTypes = function() { return this.types; }
+  this.getTypes = () => { return this.types; }
 }
 
 /* Type() - a template for the items which are for sale */
@@ -32,12 +32,12 @@ function Type(id, name, description, size, baseCost, addOns) {
 function Orders() {
   this.orders = []
   this.index = 1000;
-  this.new = function(){
+  this.new = () => {
     const order = new Order(this.index++);
     this.orders.push(order);
     return order;
   };
-  this.list = function() { console.table(this.orders); }
+  this.list = () => console.table(this.orders);
 }
 
 /* Order() - manages items being ordered */
@@ -48,35 +48,33 @@ function Order(number) {
   this.itemIndex = 100000;
   this.items = [];
   this.subTotal = 0;
-  this.add = function(type){
+  this.add = type => {
     const item = new Item(type);
     item.itemId = this.itemIndex++;
     this.items.push(item);
     this.updateTotal();
     return item;
   }
-  this.remove = function(id) {
-    this.items = this.items.filter(function(item){
+  this.remove = id => {
+    this.items = this.items.filter(item => {
       if (item.itemId == id) return false;
       return true;
     });
     this.updateTotal();
   }
-  this.updateTotal = function() {
+  this.updateTotal = () => {
     let total = 0;
-    this.items.forEach(function(item){ total += parseFloat(item.total); });
+    this.items.forEach(item => total += parseFloat(item.total));
     this.subTotal = total;
   }
-  this.getItemById = function(id){
+  this.getItemById = id => {
     let matchingItem;
-    this.items.forEach(function(item){ if (item.itemId == id) { matchingItem = item;} });
+    this.items.forEach(item => { if (item.itemId == id) { matchingItem = item;} });
     return matchingItem;
   }
-  this.getSubTotal = function(){ 
-    return this.subTotal.toFixed(2);
-   }
-  this.getOrderNumber = function() { return this.number; }
-  this.getTimeCreated = function() { return this.created; }
+  this.getSubTotal = () => { return this.subTotal.toFixed(2); }
+  this.getOrderNumber = () => { return this.number; }
+  this.getTimeCreated = () => { return this.created; }
 }
 
 /* Item() - an item for sale */
@@ -90,18 +88,18 @@ function Item(type) {
   this.availableAddOns = type.availableAddOns;
   this.selectedAddOns = {};
   this.total = 0;
-  this.add = function(key) {
+  this.add = key => {
     const availableKeys = Object.keys(this.availableAddOns);
     if (availableKeys.includes(key)) {
       this.selectedAddOns[key] = this.availableAddOns[key];
       this.updateTotal();
     }
   }
-  this.remove = function(key) {
+  this.remove = key => {
     delete this.selectedAddOns[key];
     this.updateTotal();
   }
-  this.getAvailableAddOns = function(){ if (this.availableAddOns) return Object.keys(this.availableAddOns); }
+  this.getAvailableAddOns = () => { if (this.availableAddOns) return Object.keys(this.availableAddOns); }
 }
 
 /* Item.prototype.updateTotal() - calculates the cost of an item */
@@ -109,7 +107,7 @@ Item.prototype.updateTotal = function() {
   this.total = this.baseCost;
   let values = Object.values(this.selectedAddOns);
   if (Array.isArray(values) && values.length)
-    this.total += parseFloat(values.reduce(function(a, b){ return parseFloat(a) + parseFloat(b) }));
+    this.total += parseFloat(values.reduce((a, b) => { return parseFloat(a) + parseFloat(b) }));
   this.total *= this.quantity;
 }
 
@@ -153,10 +151,10 @@ function updateOrderUI() {
 }
 
 /* $(document).ready() executes after the page loads */
-$(document).ready(function(){
+$(document).ready(() => {
 
   /* Respond to presses of the submit button */
-  $("#submit").click(function(e){
+  $("#submit").click(e => {
     order = orders.new();
     $("#order-items").empty();
     updateOrderUI();
@@ -164,7 +162,7 @@ $(document).ready(function(){
 
   /* Populate the user interface */
   const types = menu.getTypes();
-  types.forEach(function(type){
+  types.forEach(type => {
     $("#menu-items").append(`
       <div>
         <span>${type.name} (${type.size}) ... ${type.baseCost}</span>
@@ -187,7 +185,9 @@ $(document).ready(function(){
     let addOnHTML = "";
     const availableAddOns = item.getAvailableAddOns();
     if (Array.isArray(availableAddOns) && availableAddOns.length)
-      availableAddOns.forEach(function(addon){ addOnHTML += `<input class="addon-checkbox" type="checkbox" value="${item.itemId}" key="${addon}"> ${addon} (+${item.availableAddOns[addon]})<br>` });
+      availableAddOns.forEach(addon =>
+        addOnHTML += `<input class="addon-checkbox" type="checkbox" value="${item.itemId}" key="${addon}"> ${addon} (+${item.availableAddOns[addon]})<br>`
+      );
     $("#order-items").append(`
       <div id="${item.itemId}" class="${item.itemId % 2 ? 'even-row' : 'odd-row'}">
         <div>${type.name} (${type.size}) [${type.baseCost}] <span class="remove-item" item="${item.itemId}">[remove]</span></div>

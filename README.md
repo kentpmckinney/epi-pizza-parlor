@@ -21,7 +21,7 @@ https://github.com/kentpmckinney/epicodus-pizza-parlor
 * 2/19/2020 - Added basic user interface (1 hour)
 * 2/20/2020 - Improved user interface (3 hours)
 * 2/20/2020 - Improved business logic (2 hours)
-* 2/21/2020 - Updated readme(0.5 hours)
+* 2/21/2020 - Updated readme (0.5 hours)
 
 ### Specifications:
 
@@ -31,8 +31,8 @@ https://github.com/kentpmckinney/epicodus-pizza-parlor
 | **Program allows the user to choose a pizza size** | ✓ | ✓ |
 | **Program uses a formula to determine the cost** | ✓ | ✓ |
 | **Program displays the cost to the user** | ✓ | ✓ |
+| **Program allows ordering more than one pizza** | ✓ | ✓ |
 | **Program allows adding items to the order** | ✓ | ✓ |
 | **Program allows removing items from the order** | ✓ | ✓ |
 | **Removing items from the order also removes them from the user interface** | ✓ | ✓ |
-| **Program object hierarchy can scale to a lot of menu items** | ✓ | ✓ |
-| **Program objects have interfaces** | ✓ | ✓ |
+| **Program can scale to a lot of menu items** | ✓ | ✓ |
