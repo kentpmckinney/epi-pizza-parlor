@@ -1,7 +1,6 @@
 body, html {
   background: #FFFFCC;
   background: linear-gradient(45deg, yellow 0%, #FFFFCC 50%, yellow 100%);
-  background-repeat: no-repeat;
   background-blend-mode: lighten;
   background-size: cover;
 }
