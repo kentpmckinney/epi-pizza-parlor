@@ -183,7 +183,7 @@ $(document).ready(function(){
     availableAddOns.forEach(function(addon){ addOnHTML += `<input class="addon-checkbox" type="checkbox" value="${item.itemId}" key="${addon}"> ${addon} (+${item.availableAddOns[addon]})<br>` });
     updateUI();
     $("#order-items").append(`
-      <div id="${item.itemId}">
+      <div id="${item.itemId}" class="${item.itemId % 2 ? 'even-row' : 'odd-row'}">
         <div>${type.name} (${type.size}) [${type.baseCost}] <span class="remove-item" item="${item.itemId}">[remove]</span></div>
         <div>
           <div class="addon-list">${addOnHTML}</div>
