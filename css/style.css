@@ -1,10 +1,9 @@
 body, html {
-  background: rgb(36,35,0);
+  background: #FFFFCC;
   background: linear-gradient(45deg, yellow 0%, #FFFFCC 50%, yellow 100%);
   background-repeat: no-repeat;
   background-blend-mode: lighten;
   background-size: cover;
-  height: 100%;
 }
 
 .grid-container {
@@ -27,9 +26,12 @@ h2 {
   display: flex;
   flex-direction: column;
   justify-content: right;
-  overflow: auto;
   padding: 30px;
-  height: 100%;
+}
+
+#menu-items {
+  overflow-y: auto;
+  height: 50%;
 }
 
 #order {

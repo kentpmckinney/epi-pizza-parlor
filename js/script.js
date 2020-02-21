@@ -10,9 +10,9 @@ function Menu() {
     this.types.push(type);
     return type;
   }
-  this.find = function(name) {
+  this.find = function(id) {
     let matchingType;
-    this.types.forEach(function(type){ if (type.name == name) matchingType = type; });
+    this.types.forEach(function(type){ if (type.id == id) matchingType = type; });
     return matchingType;
   }
   this.getTypes = function() { return this.types; }
@@ -101,7 +101,7 @@ function Item(type) {
     delete this.selectedAddOns[key];
     this.updateTotal();
   }
-  this.getAvailableAddOns = function(){ return Object.keys(this.availableAddOns); }
+  this.getAvailableAddOns = function(){ if (this.availableAddOns) return Object.keys(this.availableAddOns); }
 }
 
 /* Item.prototype.updateTotal() - calculates the cost of an item */
@@ -113,12 +113,26 @@ Item.prototype.updateTotal = function() {
   this.total *= this.quantity;
 }
 
-/* Populate the menu with items for sale */
+/* Instantiate the menu object in global scope */
 const menu = new Menu();
-menu.new(101, "Pepperphony Pizza", "Decadent melted faux cheese with crispy meatless pepperoni", "small", 10.95,
+
+/* Populate the menu with items for sale */
+menu.new(101, "Pepperphony Pie", "Decadent melted faux cheese with crispy meatless pepperoni", "small", 10.95,
+  { "extra cheese" : "2.00", "extra pepperphony" : "1.00", "artichokes" : "1.00", "mushrooms" : "1.00" });
+menu.new(102, "Pepperphony Pie", "Decadent melted faux cheese with crispy meatless pepperoni", "med", 16.95,
+  { "extra cheese" : "2.00", "extra pepperphony" : "1.00", "artichokes" : "1.00", "mushrooms" : "1.00" })
+menu.new(103, "Pepperphony Pie", "Decadent melted faux cheese with crispy meatless pepperoni", "large", 23.95,
+  { "extra cheese" : "2.00", "extra pepperphony" : "1.00", "artichokes" : "1.00", "mushrooms" : "1.00" });
+menu.new(104, "Veggie Pie", "Decadent melted faux cheese loaded with delicious vegetables", "small", 10.95,
+  { "extra cheese" : "2.00", "extra pepperphony" : "1.00", "artichokes" : "1.00", "mushrooms" : "1.00" });
+menu.new(105, "Veggie Pie", "Decadent melted faux cheese loaded with delicious vegetables", "med", 16.95,
+  { "extra cheese" : "2.00", "extra pepperphony" : "1.00", "artichokes" : "1.00", "mushrooms" : "1.00" })
+menu.new(106, "Veggie Pie", "Decadent melted faux cheese loaded with delicious vegetables", "large", 23.95,
   { "extra cheese" : "2.00", "extra pepperphony" : "1.00", "artichokes" : "1.00", "mushrooms" : "1.00" });
 menu.new(201, "Sparkling Water", "Ice-cold pure refreshment, naturally calorie-free", "16oz", 1.95,
   { "cherry flavor" : "0.00", "strawberry flavor" : "0.00", "key lime flavor" : "0.00", "lemon flavor" : "0.00"});
+menu.new(202, "Drip Coffee", "Rich, luxurious medium-roast fair-trade", "8oz", 1.95);
+menu.new(203, "Drip Coffee", "Rich, luxurious medium-roast fair-trade", "12oz", 2.45);
 
 /* Instantiate the orders object in global scope */
 const orders = new Orders();
@@ -163,7 +177,7 @@ $(document).ready(function(){
   /* Respond to the add button on menu items */
   $(".add-button").click(function(e){
     const name = this.value;
-    const type = menu.find(name);
+    const type = menu.find(this.id);
     const item = order.add(type);
     item.updateTotal();
     order.updateTotal();
@@ -172,7 +186,8 @@ $(document).ready(function(){
     /* Create HTML for an item */
     let addOnHTML = "";
     const availableAddOns = item.getAvailableAddOns();
-    availableAddOns.forEach(function(addon){ addOnHTML += `<input class="addon-checkbox" type="checkbox" value="${item.itemId}" key="${addon}"> ${addon} (+${item.availableAddOns[addon]})<br>` });
+    if (Array.isArray(availableAddOns) && availableAddOns.length)
+      availableAddOns.forEach(function(addon){ addOnHTML += `<input class="addon-checkbox" type="checkbox" value="${item.itemId}" key="${addon}"> ${addon} (+${item.availableAddOns[addon]})<br>` });
     $("#order-items").append(`
       <div id="${item.itemId}" class="${item.itemId % 2 ? 'even-row' : 'odd-row'}">
         <div>${type.name} (${type.size}) [${type.baseCost}] <span class="remove-item" item="${item.itemId}">[remove]</span></div>
