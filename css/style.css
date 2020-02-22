@@ -1,6 +1,6 @@
 body, html {
   background: #FFFFCC;
-  background: linear-gradient(45deg, yellow 0%, #FFFFCC 50%, yellow 100%);
+  /* background: linear-gradient(45deg, yellow 0%, #FFFFCC 50%, yellow 100%); */
   background-blend-mode: lighten;
   background-size: cover;
 }
@@ -30,7 +30,7 @@ h2 {
 
 #menu-items {
   overflow-y: auto;
-  height: 50%;
+  height: 70%;
 }
 
 #order {
@@ -85,12 +85,4 @@ h2 {
   text-align: right;
   font-family: monospace;
   font-size: 8pt;
-}
-
-.even-row {
-  background: #FFFFCC;
-}
-
-.odd-row {
-  background: #FFFF99;
 }
