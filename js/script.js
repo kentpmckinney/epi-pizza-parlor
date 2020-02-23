@@ -5,12 +5,12 @@
 /* Menu() -a collection of the types of items for sale */
 function Menu() {
   this.types = [];
-  this.new = (id, name, description, size, baseCost, addOns) => {
+  this.new = (id, name, description, size, baseCost, addOns) => { // adds a new item type
     const type = new Type(id, name, description, size, baseCost, addOns);
     this.types.push(type);
     return type;
   }
-  this.find = id => {
+  this.find = id => { // find an item type by id
     let matchingType;
     this.types.forEach(type => { if (type.id == id) matchingType = type; });
     return matchingType;
@@ -32,12 +32,11 @@ function Type(id, name, description, size, baseCost, addOns) {
 function Orders() {
   this.orders = []
   this.index = 1000;
-  this.new = () => {
+  this.new = () => { // Starts a new order
     const order = new Order(this.index++);
     this.orders.push(order);
     return order;
   };
-  this.list = () => console.table(this.orders);
 }
 
 /* Order() - manages items being ordered */
@@ -48,21 +47,21 @@ function Order(number) {
   this.itemIndex = 100000;
   this.items = [];
   this.subTotal = 0;
-  this.add = type => {
+  this.add = type => { // add an item to the current order
     const item = new Item(type);
     item.itemId = this.itemIndex++;
     this.items.push(item);
     this.updateTotal();
     return item;
   }
-  this.remove = id => {
+  this.remove = id => { // remove an existing item from the order
     this.items = this.items.filter(item => {
       if (item.itemId == id) return false;
       return true;
     });
     this.updateTotal();
   }
-  this.updateTotal = () => {
+  this.updateTotal = () => { // updates the order total
     let total = 0;
     this.items.forEach(item => total += parseFloat(item.total));
     this.subTotal = total;
@@ -88,14 +87,14 @@ function Item(type) {
   this.availableAddOns = type.availableAddOns;
   this.selectedAddOns = {};
   this.total = 0;
-  this.add = key => {
+  this.add = key => { // add an add-on to the item
     const availableKeys = Object.keys(this.availableAddOns);
     if (availableKeys.includes(key)) {
       this.selectedAddOns[key] = this.availableAddOns[key];
       this.updateTotal();
     }
   }
-  this.remove = key => {
+  this.remove = key => { // remove an add-on from the item
     delete this.selectedAddOns[key];
     this.updateTotal();
   }
@@ -160,7 +159,7 @@ $(document).ready(() => {
     updateOrderUI();
   });
 
-  /* Populate the user interface */
+  /* Populate the menu */
   const types = menu.getTypes();
   types.forEach(type => {
     $("#menu-items").append(`
@@ -172,7 +171,7 @@ $(document).ready(() => {
     `);
   });
 
-  /* Respond to the add button on menu items */
+  /* Respond to the click of the add button on menu items */
   $(".add-button").click(function(e){
     const name = this.value;
     const type = menu.find(this.id);
@@ -181,11 +180,11 @@ $(document).ready(() => {
     order.updateTotal();
     updateOrderUI();
 
-    /* Create HTML for an item */
+    /* Create HTML for a new order item */
     let addOnHTML = "";
     const availableAddOns = item.getAvailableAddOns();
     if (Array.isArray(availableAddOns) && availableAddOns.length)
-      availableAddOns.forEach(addon =>
+      availableAddOns.forEach(addon => // add the checkboxes for add-ons
         addOnHTML += `<input class="addon-checkbox" type="checkbox" value="${item.itemId}" key="${addon}"> ${addon} (+${item.availableAddOns[addon]})<br>`
       );
     $("#order-items").append(`

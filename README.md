@@ -23,6 +23,7 @@ https://github.com/kentpmckinney/epicodus-pizza-parlor
 * 2/20/2020 - Improved business logic (2 hours)
 * 2/21/2020 - Updated readme (0.25 hours)
 * 2/21/2020 - Refactored code (1.5 hours)
+* 2/22/2010 - Refactored code (0.50 hours)
 
 ### Specifications:
 
