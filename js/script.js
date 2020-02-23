@@ -154,9 +154,11 @@ $(document).ready(() => {
 
   /* Respond to presses of the submit button */
   $("#submit").click(e => {
-    order = orders.new();
-    $("#order-items").empty();
-    updateOrderUI();
+    if (order.getSubTotal() > 0) {
+      order = orders.new();
+      $("#order-items").empty();
+      updateOrderUI();
+    }
   });
 
   /* Populate the menu */
