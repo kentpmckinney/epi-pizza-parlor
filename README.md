@@ -1,3 +1,5 @@
+<!-- Category: HTML/CSS/JS -->
+
 # Independent Project
 ## The Pizza Parlor Program
 https://github.com/kentpmckinney/epicodus-pizza-parlor
