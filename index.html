@@ -1,46 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
-      <link rel="stylesheet" href="css/style.css"/>
-      <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-      <script src="js/script.js"></script>
-      <title>Pizza Parlor</title>
-  </head>
-  <body class="container">
-    <header>
-      <h1 class="centered">One-For-All</h1>
-      <h2 class="centered">Pizzeria & Deli</h2>
-    </header>
-    <main>
-      <div class="grid-container">
-        <div id="menu">
-          <div class="centered"><h2>✦ Menu ✦</h2></div>
-          <div>&nbsp;</div>
-          <div class="notice">All items are vegan, gluten-free, and dairy-free</div>
-          <div>&nbsp;</div>
-          <div id="menu-items"></div>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+  <script src="js/script.js"></script>
+  <title>Pizza Parlor</title>
+</head>
+<body class="container">
+  <header>
+    <h1 class="centered">One-For-All</h1>
+    <h2 class="centered">Pizzeria & Deli</h2>
+  </header>
+  <main>
+    <div class="grid-container">
+      <div id="menu">
+        <div class="centered">
+          <h2>✦ Menu ✦</h2>
         </div>
-        <div id="order">
-          <div class="centered"><h2>✦ Your Order ✦</h2></div>
-          <div id="order-items"></div>
+        <div>&nbsp;</div>
+        <div class="notice">All items are vegan, gluten-free, and dairy-free</div>
+        <div>&nbsp;</div>
+        <div id="menu-items"></div>
+      </div>
+      <div id="order">
+        <div class="centered">
+          <h2>✦ Your Order ✦</h2>
         </div>
-        <div id="summary">
-          <div class="centered"><h2>✦ Summary ✦</h2></div>
-          <div class="order-info">
-            <div><span id="created-time"></span></div>
-            <div>Order #: <span id="order-number"></span></div>
-          </div>
-          <div class="total">Total: $<span id="sub-total">0.00</span></div>
-          <div>&nbsp;</div>
-          <div>&nbsp;</div>
-          <div>&nbsp;</div>
-          <div class="centered">
-            <button id="submit" type="submit">Submit Order</button>
-          </div>
+        <div id="order-items"></div>
+      </div>
+      <div id="summary">
+        <div class="centered">
+          <h2>✦ Summary ✦</h2>
+        </div>
+        <div class="order-info">
+          <div><span id="created-time"></span></div>
+          <div>Order #: <span id="order-number"></span></div>
+        </div>
+        <div class="total">Total: $<span id="sub-total">0.00</span></div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+        <div class="centered">
+          <button id="submit" type="submit">Submit Order</button>
         </div>
       </div>
-    </main>
-  </body>
+    </div>
+  </main>
+</body>
 </html>

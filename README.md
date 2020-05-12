@@ -31,17 +31,9 @@ Git (optional but recommended)
 2. Navigate to the folder location of the source files in Finder or in the Terminal
 3. Launch a web browser so that it opens index.html
 
-## Running Automated Tests
-
-how to run the automated tests
-
-```
-example
-```
-
 ## Deployment
 
-
+Source files are deployable as-is
 
 ## Technologies Used
 
@@ -57,7 +49,7 @@ Kent McKinney - [GitHub](https://github.com/kentpmckinney) - [LinkedIn](https://
 
 ## Acknowledgments
 
-
+https://www.learnhowtoprogram.com/intermediate-javascript/object-oriented-javascript/object-oriented-javascript-independent-project
 
 ### Specifications:
 
